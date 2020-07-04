@@ -58,15 +58,17 @@ int main()
         -0.5f,  -0.5f, 0.0f,   0.0f, 1.0f, 1.0f,
          0.0f,  0.0f, 0.0f,   1.0f, 1.0f, 0.0f,
         -0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 1.0f,
-         0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f
-         -0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 1.0f
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+         0.5f, -0.5f, 0.5f,  1.0f, 1.0f, 1.0f
     };
     unsigned int indices[] = {
         0, 1, 2,
         3, 4, 5,
         6, 7, 8
     };
+
+    glEnable(GL_DEPTH_TEST);  
 
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -92,7 +94,7 @@ int main()
         processInput(window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         ourShader.use();
 
@@ -100,7 +102,7 @@ int main()
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
 
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
