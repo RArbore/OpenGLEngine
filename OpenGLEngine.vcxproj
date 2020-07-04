@@ -152,12 +152,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\LibsAndHeaders\lib\glad.c" />
     <ClCompile Include="OpenGLEngine.cpp" />
+    <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.glsl" />
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
