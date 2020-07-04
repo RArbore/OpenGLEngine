@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include "Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -99,46 +100,59 @@ int main()
 
     float vertices[] = {
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
 
         -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
          0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,
+    };
+
+    std::vector<glm::vec3> cubePositions = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
     glEnable(GL_DEPTH_TEST);  
@@ -167,11 +181,9 @@ int main()
 
         ourShader.use();
 
-        glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
 
-        model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         glm::vec3 direction;
         direction.x = cos(glm::radians(yaw));
         direction.z = sin(glm::radians(yaw));
@@ -184,14 +196,19 @@ int main()
         view = glm::lookAt(cameraPos, cameraPos + direction, cameraUp);
         projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-        unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
-        unsigned int viewLoc  = glGetUniformLocation(ourShader.ID, "view");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-        ourShader.setMat4("projection", projection);
+        for (unsigned int i = 0; i < cubePositions.size(); i++) {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = model = glm::translate(model, cubePositions[i]);
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+            unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
+            unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+            ourShader.setMat4("projection", projection);
+
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
