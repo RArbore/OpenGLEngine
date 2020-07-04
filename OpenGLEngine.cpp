@@ -48,15 +48,17 @@ int main()
     Shader ourShader("vertex.glsl", "fragment.glsl");
 
     float vertices[] = {
-        // positions          // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 1.0f,
-         0.5f, -0.5f, 0.0f,   1.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,
-        -0.5f,  0.5f, 0.0f,   0.0f, 1.0f
+        // positions          // colors
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,
+        -0.5f,  -0.5f, 0.0f,   0.0f, 1.0f, 1.0f,
+         0.0f,  0.0f, 0.0f,   1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 1.0f
     };
     unsigned int indices[] = {
-        0, 1, 3,
-        1, 2, 3
+        0, 1, 2,
+        3, 4, 5
     };
 
     unsigned int VBO, VAO, EBO;
@@ -72,10 +74,10 @@ int main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     while(!glfwWindowShouldClose(window))
@@ -94,7 +96,7 @@ int main()
         glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(indices));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
