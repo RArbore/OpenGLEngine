@@ -99,52 +99,52 @@ int main()
     Shader ourShader("vertex.glsl", "fragment.glsl");
     Shader lightCubeShader("vertex.glsl", "light.glsl");
 
-    float cubeR = 0.2f;
-    float cubeG = 0.2f;
-    float cubeB = 0.2f;
+    float cubeR = 0.5f;
+    float cubeG = 0.5f;
+    float cubeB = 0.5f;
 
     float vertices[] = {
-        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
+        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
+        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 0.0f, 1.0f,
 
-        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
+        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, -1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, -1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, -1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, -1.0f, 0.0f, 0.0f,
 
-         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
+         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 1.0f, 0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 1.0f, 0.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB,
+        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, -1.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, -1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, -1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, -1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, -1.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, -1.0f, 0.0f,
 
-        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB,
-        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB,
+        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  cubeR, cubeG, cubeB, 0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  cubeR, cubeG, cubeB, 0.0f, 1.0f, 0.0f,
     };
 
     std::vector<glm::vec3> cubePositions;
@@ -155,7 +155,7 @@ int main()
     }
 
     glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-    glm::vec3 lightColor(0.9f, 0.4f, 0.6f);
+    glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);  
 
@@ -168,18 +168,21 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     glGenVertexArrays(1, &lightVAO);
     glBindVertexArray(lightVAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     while(!glfwWindowShouldClose(window))
@@ -191,6 +194,7 @@ int main()
 
         ourShader.use();
         ourShader.setVec3("lightColor", lightColor);
+        ourShader.setVec3("lightPos", lightPos);
 
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
