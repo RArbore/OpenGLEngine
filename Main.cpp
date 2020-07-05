@@ -2,16 +2,29 @@
 #include <vector>
 #include <tuple>
 #include <stdlib.h>
+#include "SimplexNoise.h"
+#include "MarchingCubesTable.hpp""
 
-std::vector<std::vector<float>> generateSurface() {
-	std::vector<std::vector<float>> ret;
-	for (int x = 0; x < 200; x++) {
-		ret.push_back(std::vector<float>());
-		for (int z = 0; z < 200; z++) {
-			float random = ((float)(rand() % 100))/100.0f;
-			ret.at(x).push_back(1.0f + random);
+const int mapWidth = 25;
+const int mapHeight = 25;
+const int mapDepth = 25;
+
+std::vector<std::vector<std::vector<float>>> generateSurface() {
+	SimplexNoise noise;
+
+	std::vector<std::vector<std::vector<float>>> ret;
+
+	for (float x = 0; x < mapWidth; x++) {
+		ret.push_back(std::vector<std::vector<float>>());
+		for (float y = 0; y < mapHeight; y++) {
+			ret.at(x).push_back(std::vector<float>());
+			for (float z = 0; z < mapDepth; z++) {
+				ret.at(x).at(y).push_back(noise.noise(x / 10.0f, y / 10.0f, z / 10.0f));
+				
+			}
 		}
 	}
+
 	return ret;
 }
 
@@ -34,6 +47,50 @@ void addTuplesToVertices(std::vector<float> *vertices, std::vector<std::tuple<fl
 	}
 }
 
+void cubeMarch(float cutoff, int x, int y, int z, std::vector<std::vector<std::vector<float>>> surface, std::vector<float>* vertices) {
+	std::tuple<float, float, float, float> cubeVertices[8];
+	int offsets[] = {0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0};
+	std::tuple<float, float, float> edgeVertices[12];
+	int edgePoints[] = {0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
+	for (int p = 0; p < 8; p++) {
+		std::tuple<float, float, float, float> point = { 
+			x + offsets[p * 3], 
+			y + offsets[p * 3 + 1], 
+			z + offsets[p * 3 + 2], 
+			surface.at(x + offsets[p * 3]).at(y + offsets[p * 3 + 1]).at(z + offsets[p * 3 + 2]) };
+		cubeVertices[p] = point;
+	}
+	for (int e = 0; e < 12; e++) {
+		int p1 = edgePoints[e * 2];
+		int p2 = edgePoints[e * 2 + 1];
+		std::tuple<float, float, float> edge = {
+			(std::get<0>(cubeVertices[p2]) + std::get<0>(cubeVertices[p1])) / 2.0f,
+			(std::get<1>(cubeVertices[p2]) + std::get<1>(cubeVertices[p1])) / 2.0f,
+			(std::get<2>(cubeVertices[p2]) + std::get<2>(cubeVertices[p1])) / 2.0f
+		};
+		edgeVertices[e] = edge;
+	}
+	int code = 0;
+	for (int i = 0; i < 8; i++) {
+		if (std::get<3>(cubeVertices[i]) >= cutoff) code += pow(2, i);
+	}
+	std::vector<int> triTableRead;
+	for (int i = 0; i < 16; i++) {
+		int read = MarchingCubesTable::triTable[code][i];
+		if (read == -1) break;
+		triTableRead.push_back(read);
+	}
+	for (int v = 0; v < triTableRead.size() / 3; v++) {
+		std::tuple<float, float, float> p1 = edgeVertices[triTableRead.at(v * 3)];
+		std::tuple<float, float, float> p2 = edgeVertices[triTableRead.at(v * 3 + 1)];
+		std::tuple<float, float, float> p3 = edgeVertices[triTableRead.at(v * 3 + 2)];
+		std::tuple<float, float, float> color = { 1.0f, 1.0f, 1.0f };
+		std::tuple<float, float, float> norm = getNorm(p1, p2, p3);
+		std::vector<std::tuple<float, float, float>> tuples = { p1, color, norm, p2, color, norm, p3, color, norm };
+		addTuplesToVertices(vertices, tuples);
+	}
+}
+
 int main() {
 
 	OpenGLEngine renderer;
@@ -42,31 +99,23 @@ int main() {
 	renderer.lightPos.y = 4.0f;
 	renderer.lightPos.z = -1.0f;
 
-	std::vector<std::vector<float>> surface = generateSurface();
+	std::vector<std::vector<std::vector<float>>> surface = generateSurface();
+	
+	for (int x = 0; x < mapWidth - 1; x++) {
+		for (int y = 0; y < mapHeight - 1; y++) {
+			for (int z = 0; z < mapDepth - 1; z++) {
 
-	for (int x = 0; x < 199; x++) {
-		for (int z = 0; z < 199; z++) {
-			std::tuple<float, float, float> p1 = {x, surface.at(x).at(z), z};
-			std::tuple<float, float, float> p2 = {x+1, surface.at(x+1).at(z), z};
-			std::tuple<float, float, float> p3 = {x, surface.at(x).at(z+1), z+1};
-			std::tuple<float, float, float> color = {((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f};
-			std::tuple<float, float, float> norm = getNorm(p1, p2, p3);
-			std::vector<std::tuple<float, float, float>> tuples = { p1, color, norm, p2, color, norm, p3, color, norm };
-			addTuplesToVertices(&renderer.vertices, tuples);
+				cubeMarch(0.3, x, y, z, surface, &renderer.vertices);
 
-			p1 = {x+1, surface.at(x+1).at(z), z};
-			p2 = {x, surface.at(x).at(z+1), z+1};
-			p3 = {x+1, surface.at(x+1).at(z+1), z+1};
-			color = {((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f};
-			norm = getNorm(p1, p2, p3);
-			tuples = { p1, color, norm, p2, color, norm, p3, color, norm };
-			addTuplesToVertices(&renderer.vertices, tuples);
+				
+			}
 		}
 	}
 
 	std::cout << renderer.vertices.size() << std::endl;
 
 	renderer.runRenderer();
+	
 
 	return 0;
 }

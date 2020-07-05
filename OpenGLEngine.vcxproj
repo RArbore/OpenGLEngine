@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\..\..\LibsAndHeaders\lib\glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OpenGLEngine.cpp" />
+    <ClCompile Include="SimplexNoise.cpp" />
     <ClCompile Include="stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +161,9 @@
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MarchingCubesTable.hpp" />
     <ClInclude Include="OpenGLEngine.h" />
+    <ClInclude Include="SimplexNoise.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>
