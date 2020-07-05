@@ -49,15 +49,17 @@ int main() {
 			std::tuple<float, float, float> p1 = {x, surface.at(x).at(z), z};
 			std::tuple<float, float, float> p2 = {x+1, surface.at(x+1).at(z), z};
 			std::tuple<float, float, float> p3 = {x, surface.at(x).at(z+1), z+1};
+			std::tuple<float, float, float> color = {((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f};
 			std::tuple<float, float, float> norm = getNorm(p1, p2, p3);
-			std::vector<std::tuple<float, float, float>> tuples = { p1, norm, p2, norm, p3, norm };
+			std::vector<std::tuple<float, float, float>> tuples = { p1, color, norm, p2, color, norm, p3, color, norm };
 			addTuplesToVertices(&renderer.vertices, tuples);
 
 			p1 = {x+1, surface.at(x+1).at(z), z};
 			p2 = {x, surface.at(x).at(z+1), z+1};
 			p3 = {x+1, surface.at(x+1).at(z+1), z+1};
+			color = {((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f, ((float)(rand() % 256))/256.0f};
 			norm = getNorm(p1, p2, p3);
-			tuples = { p1, norm, p2, norm, p3, norm };
+			tuples = { p1, color, norm, p2, color, norm, p3, color, norm };
 			addTuplesToVertices(&renderer.vertices, tuples);
 		}
 	}
