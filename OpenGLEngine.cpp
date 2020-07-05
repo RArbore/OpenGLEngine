@@ -64,8 +64,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
         pitch = -89.0f;
 }
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1440;
+const unsigned int SCR_HEIGHT = 900;
 
 int main()
 {
@@ -90,7 +90,7 @@ int main()
         return -1;
     }    
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
@@ -195,6 +195,8 @@ int main()
         ourShader.use();
         ourShader.setVec3("lightColor", lightColor);
         ourShader.setVec3("lightPos", lightPos);
+        ourShader.setVec3("viewPos", cameraPos); 
+
 
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
