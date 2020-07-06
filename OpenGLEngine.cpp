@@ -201,7 +201,7 @@ int OpenGLEngine::runRenderer()
         direction.y = sin(glm::radians(pitch));
         direction = glm::normalize(direction);
         view = glm::lookAt(cameraPos, cameraPos + direction, cameraUp);
-        projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.01f, 500.0f);
+        projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.01f, 15000.0f);
 
         glm::mat4 model = glm::mat4(1.0f);
 
