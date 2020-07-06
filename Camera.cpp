@@ -12,6 +12,9 @@ Camera::Camera(float _cameraSpeed, float _sensitivity) {
 
 	cameraSpeed = _cameraSpeed;
 	sensitivity = _sensitivity;
+
+	lastX = 0.f;
+	lastY = 0.f;
 }
 
 Camera::~Camera() {}

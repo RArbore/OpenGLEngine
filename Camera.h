@@ -24,7 +24,6 @@ public:
 	glm::mat4 generateViewMatrix();
 
 private:
-	glm::vec3 direction;
 	glm::vec3 cameraPos, cameraFront, cameraUp;
 	float yaw, pitch;
 	float lastX, lastY;
