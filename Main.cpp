@@ -6,12 +6,21 @@
 #include "MarchingCubesTable.hpp""
 #include <thread>
 
-const int mapWidth = 50;
-const int mapHeight = 50;
-const int mapDepth = 50;
+const int mapWidth = 1000;
+const int mapHeight = 22;
+const int mapDepth = 1000;
 
 std::vector<std::vector<std::vector<float>>> generateSurface() {
 	SimplexNoise noise;
+
+	std::vector<std::vector<float>> heightMap;
+
+	for (float x = 0; x < mapWidth; x++) {
+		heightMap.push_back(std::vector<float>());
+		for (float z = 0; z < mapWidth; z++) {
+			heightMap.at(x).push_back(noise.noise(x / 100.0f, z / 100.0f) * 10 + 10);
+		}
+	}
 
 	std::vector<std::vector<std::vector<float>>> ret;
 
@@ -20,8 +29,8 @@ std::vector<std::vector<std::vector<float>>> generateSurface() {
 		for (float y = 0; y < mapHeight; y++) {
 			ret.at(x).push_back(std::vector<float>());
 			for (float z = 0; z < mapDepth; z++) {
-				ret.at(x).at(y).push_back(noise.noise(x / 10.0f, y / 10.0f, z / 10.0f));
-				
+				if (y < heightMap.at(x).at(z)) ret.at(x).at(y).push_back(1);
+				else ret.at(x).at(y).push_back(0);
 			}
 		}
 	}
@@ -123,7 +132,7 @@ int main() {
 		for (int y = 0; y < mapHeight - 1; y++) {
 			for (int z = 0; z < mapDepth - 1; z++) {
 
-				cubeMarch(0.3, x, y, z, &surface, &cubeTuples);
+				cubeMarch(0.4, x, y, z, &surface, &cubeTuples);
 
 			}
 		}
