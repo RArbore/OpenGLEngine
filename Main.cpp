@@ -4,9 +4,10 @@
 #include <stdlib.h>
 #include "SimplexNoise.h"
 #include "MarchingCubesTable.hpp""
+#include <thread>
 
-const int mapWidth = 15;
-const int mapHeight = 15;
+const int mapWidth = 50;
+const int mapHeight = 50;
 const int mapDepth = 50;
 
 std::vector<std::vector<std::vector<float>>> generateSurface() {
@@ -47,12 +48,12 @@ void addTuplesToVertices(std::vector<float> *vertices, std::vector<std::tuple<fl
 	}
 }
 
-std::vector<std::tuple<float, float, float>> cubeMarch(float cutoff, int x, int y, int z, std::vector<std::vector<std::vector<float>>> surface) {
+void cubeMarch(float cutoff, int x, int y, int z, std::vector<std::vector<std::vector<float>>> *surface, std::vector<std::vector<std::tuple<float, float, float>>> *cubeTuples) {
 	std::tuple<float, float, float, float> cubeVertices[8];
 	int offsets[] = {0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0};
 	int numAbove = 0;
 	for (int p = 0; p < 8; p++) {
-		float value = surface.at(x + offsets[p * 3]).at(y + offsets[p * 3 + 1]).at(z + offsets[p * 3 + 2]);
+		float value = surface->at(x + offsets[p * 3]).at(y + offsets[p * 3 + 1]).at(z + offsets[p * 3 + 2]);
 		std::tuple<float, float, float, float> point = { 
 			x + offsets[p * 3], 
 			y + offsets[p * 3 + 1], 
@@ -63,7 +64,7 @@ std::vector<std::tuple<float, float, float>> cubeMarch(float cutoff, int x, int 
 		if (value >= cutoff) numAbove++;
 	}
 	if (numAbove == 0 || numAbove == 8) {
-		return std::vector<std::tuple<float, float, float>>();
+		return;
 	}
 	std::tuple<float, float, float> edgeVertices[12];
 	int edgePoints[] = {0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7};
@@ -101,7 +102,7 @@ std::vector<std::tuple<float, float, float>> cubeMarch(float cutoff, int x, int 
 		std::tuple<float, float, float> to_push[] = { p1, color, norm, p2, color, norm, p3, color, norm };
 		tuples.insert(tuples.end(), std::begin(to_push), std::end(to_push));
 	}
-	return tuples;
+	cubeTuples->push_back(tuples);
 }
 
 int main() {
@@ -113,16 +114,23 @@ int main() {
 	renderer.lightPos.z = -1.0f;
 
 	std::vector<std::vector<std::vector<float>>> surface = generateSurface();
+
+	std::vector<std::vector<std::tuple<float, float, float>>> cubeTuples;
+
+	std::vector<std::thread> threads;
 	
 	for (int x = 0; x < mapWidth - 1; x++) {
 		for (int y = 0; y < mapHeight - 1; y++) {
 			for (int z = 0; z < mapDepth - 1; z++) {
 
-				std::vector<std::tuple<float, float, float>> tuples = cubeMarch(0.3, x, y, z, surface);
-				addTuplesToVertices(&renderer.vertices, tuples);
-				
+				cubeMarch(0.3, x, y, z, &surface, &cubeTuples);
+
 			}
 		}
+	}
+
+	for (auto tuples : cubeTuples) {
+		addTuplesToVertices(&renderer.vertices, tuples);
 	}
 
 	std::cout << renderer.vertices.size() << std::endl;
