@@ -150,6 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OpenGLEngine.cpp" />
@@ -161,6 +162,7 @@
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="MarchingCubesTable.hpp" />
     <ClInclude Include="OpenGLEngine.h" />
     <ClInclude Include="SimplexNoise.h" />

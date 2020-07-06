@@ -8,6 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 #include <algorithm>
+#include "Camera.h"
 #include "Shader.h"
 
 class OpenGLEngine {

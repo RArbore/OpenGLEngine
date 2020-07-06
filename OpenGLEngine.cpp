@@ -5,12 +5,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 } 
 
-glm::vec3 cameraPos   = glm::vec3(0.0f, 5.0f,  0.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-float yaw = 0.0f;
-float pitch = 0.0f;
-bool firstMouse = true;
+Camera camera(0.5f, 0.1f); // cameraSpeed, sensitivity
 
 std::vector<float> vertices;
 glm::vec3 lightPos;
@@ -21,41 +16,21 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
     const float cameraSpeed = 0.5f;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        camera.goForwards();
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        camera.goBackwards();
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.goLeft();
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.goRight();
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraUp;
+        camera.goUp();
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraUp;
+        camera.goDown();
 }
 
-float lastX = 400, lastY = 300;
-
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-    if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
-    lastX = xpos;
-    lastY = ypos;
-
-    const float sensitivity = 0.1f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-    yaw   += xoffset;
-    pitch += yoffset;  
-    if(pitch > 89.0f)
-        pitch =  89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
+    camera.mouse_callback(window, xpos, ypos);
 }
 
 const unsigned int SCR_WIDTH = 1440;
@@ -185,22 +160,13 @@ int OpenGLEngine::runRenderer()
         ourShader.use();
         ourShader.setVec3("lightColor", lightColor);
         ourShader.setVec3("lightPos", lightPos);
-        ourShader.setVec3("viewPos", cameraPos); 
+        ourShader.setVec3("viewPos", camera.getCameraPosVector()); 
 
+        camera.updateDirection();
 
-        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 view = camera.generateViewMatrix();
         glm::mat4 projection = glm::mat4(1.0f);
 
-        glm::vec3 direction;
-        direction.x = cos(glm::radians(yaw));
-        direction.z = sin(glm::radians(yaw));
-        direction.y = 0.0f;
-        cameraFront = glm::normalize(direction);
-        direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        direction.y = sin(glm::radians(pitch));
-        direction = glm::normalize(direction);
-        view = glm::lookAt(cameraPos, cameraPos + direction, cameraUp);
         projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.01f, 15000.0f);
 
         glm::mat4 model = glm::mat4(1.0f);
