@@ -125,8 +125,6 @@ int main() {
 	std::vector<std::vector<std::vector<float>>> surface = generateSurface();
 
 	std::vector<std::vector<std::tuple<float, float, float>>> cubeTuples;
-
-	std::vector<std::thread> threads;
 	
 	for (int x = 0; x < mapWidth - 1; x++) {
 		for (int y = 0; y < mapHeight - 1; y++) {
