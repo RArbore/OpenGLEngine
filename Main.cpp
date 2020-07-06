@@ -6,9 +6,9 @@
 #include "MarchingCubesTable.hpp""
 #include <thread>
 
-const int mapWidth = 1000;
+const int mapWidth = 200;
 const int mapHeight = 22;
-const int mapDepth = 1000;
+const int mapDepth = 200;
 
 std::vector<std::vector<std::vector<float>>> generateSurface() {
 	SimplexNoise noise;
