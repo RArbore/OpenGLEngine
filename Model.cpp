@@ -30,8 +30,8 @@ void Model::draw(GLenum mode, GLsizei verticesPerShape) {
 	shader.use();
 	glBindVertexArray(VAO);
 	glDrawArrays(mode, 0, vertices.size() / verticesPerShape);
-	//glBindVertexArray(0);
-	//glUseProgram(0);
+	glBindVertexArray(0);
+	glUseProgram(0);
 }
 
 void Model::cleanUp() {
