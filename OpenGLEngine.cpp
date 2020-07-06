@@ -123,24 +123,13 @@ int OpenGLEngine::runRenderer()
 
     glEnable(GL_DEPTH_TEST);  
 
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    // info to map vertices to vertex shader inputs (position, color, normal)
+    VAOInfo vaoInfo(3);
+    vaoInfo.addAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
+    vaoInfo.addAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
+    vaoInfo.addAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * 4, &vertices.front(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
+    Model model(vertices, vaoInfo, ourShader);
 
     while(!glfwWindowShouldClose(window))
     {
@@ -169,23 +158,21 @@ int OpenGLEngine::runRenderer()
 
         projection = glm::perspective(glm::radians(60.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.01f, 15000.0f);
 
-        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 modelMatrix = glm::mat4(1.0f);
 
         unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
         unsigned int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
         ourShader.setMat4("projection", projection);
-
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size()/6);
+        
+        model.draw(GL_TRIANGLES, 6);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    model.cleanUp();
 
     glfwTerminate();
 

@@ -10,6 +10,8 @@
 #include <algorithm>
 #include "Camera.h"
 #include "Shader.h"
+#include "VAOInfo.h"
+#include "Model.h"
 
 class OpenGLEngine {
 
