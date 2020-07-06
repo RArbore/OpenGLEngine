@@ -42,9 +42,9 @@ std::tuple<float, float, float> getNorm(std::tuple<float, float, float> p1, std:
 	std::tuple<float, float, float> A = { std::get<0>(p2) - std::get<0>(p1), std::get<1>(p2) - std::get<1>(p1), std::get<2>(p2) - std::get<2>(p1) };
 	std::tuple<float, float, float> B = { std::get<0>(p3) - std::get<0>(p1), std::get<1>(p3) - std::get<1>(p1), std::get<2>(p3) - std::get<2>(p1) };
 	std::tuple<float, float, float> ret = {
-		std::get<1>(A) * std::get<2>(B) - std::get<2>(A) * std::get<1>(B),
-		std::get<2>(A) * std::get<0>(B) - std::get<0>(A) * std::get<2>(B),
-		std::get<0>(A) * std::get<1>(B) - std::get<1>(A) * std::get<0>(B)
+		-(std::get<1>(A) * std::get<2>(B) - std::get<2>(A) * std::get<1>(B)),
+		-(std::get<2>(A) * std::get<0>(B) - std::get<0>(A) * std::get<2>(B)),
+		-(std::get<0>(A) * std::get<1>(B) - std::get<1>(A) * std::get<0>(B))
 	};
 	return ret;
 }
@@ -119,7 +119,7 @@ int main() {
 	OpenGLEngine renderer;
 
 	renderer.lightPos.x = -1.0f;
-	renderer.lightPos.y = 4.0f;
+	renderer.lightPos.y = 25.0f;
 	renderer.lightPos.z = -1.0f;
 
 	std::vector<std::vector<std::vector<float>>> surface = generateSurface();
